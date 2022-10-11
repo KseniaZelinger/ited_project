@@ -1,12 +1,16 @@
+body {
+  height: 100vh;
+}
+
 main {
     width: 100%;
-    height: 100vh;
+    height: calc(100% - 80px);
     display: grid;
     justify-content: center;
     align-items: center;
 }
 
-section.console {
+.console {
     width: 600px;
     height: 400px;
     background-color: rgb(47, 47, 47);

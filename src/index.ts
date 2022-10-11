@@ -1,48 +1,11 @@
 import './css/reset.css';
 import './css/global.css';
-import './task.ts';
+import './css/header.css';
+import {ITEDConsole} from './ited-console';
 
 const input = document.getElementById('input') as HTMLElement;
 
-// Пока что не нужен
-// const cursor = document.getElementById('cursor') as HTMLElement;
-
-class ITEDConsole {
-  readonly history: HTMLElement;
-
-  constructor() {
-    this.history = document.getElementById('history') as HTMLElement;
-  }
-
-  public focusAndMoveCursorToTheEnd(): void {
-    input.focus();
-  
-    const range: Range = document.createRange();
-    const selection = window.getSelection() as Selection;
-    const { childNodes } = input;
-    const lastChildNode = childNodes && childNodes.length - 1;
-    
-    range.selectNodeContents(lastChildNode === -1 ? input : childNodes[lastChildNode]);
-    range.collapse(false);
-
-    selection.removeAllRanges();
-    selection.addRange(range);
-  }
-
-  public handleCommand(command: String): void {
-    const line = document.createElement('DIV');
-    line.textContent = `> ${ command }`;
-    this.history.appendChild(line);
-
-    if (command === 'test') {
-      const result: HTMLElement = document.createElement('DIV');
-      result.textContent = `Test command works!`;
-      this.history.appendChild(result);
-    }
-  }
-}
-
-let itedConsole: ITEDConsole = new ITEDConsole();
+let itedConsole: ITEDConsole = new ITEDConsole(input);
 
 document.addEventListener('selectionchange', () => {
   if (document.activeElement!.id !== 'input') return;
