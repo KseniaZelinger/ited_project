@@ -1,36 +1,48 @@
 import './css/reset.css';
 import './css/global.css';
+import './task.ts';
 
-const history = document.getElementById('history') as HTMLElement;
 const input = document.getElementById('input') as HTMLElement;
-const cursor = document.getElementById('cursor') as HTMLElement;
 
-function focusAndMoveCursorToTheEnd(e?: any) {  
-  input.focus();
+// Пока что не нужен
+// const cursor = document.getElementById('cursor') as HTMLElement;
+
+class ITEDConsole {
+  readonly history: HTMLElement;
+
+  constructor() {
+    this.history = document.getElementById('history') as HTMLElement;
+  }
+
+  public focusAndMoveCursorToTheEnd(): void {
+    input.focus();
   
-  const range = document.createRange();
-  const selection = window.getSelection() as Selection;
-  const { childNodes } = input;
-  const lastChildNode = childNodes && childNodes.length - 1;
-  
-  range.selectNodeContents(lastChildNode === -1 ? input : childNodes[lastChildNode]);
-  range.collapse(false);
+    const range: Range = document.createRange();
+    const selection = window.getSelection() as Selection;
+    const { childNodes } = input;
+    const lastChildNode = childNodes && childNodes.length - 1;
+    
+    range.selectNodeContents(lastChildNode === -1 ? input : childNodes[lastChildNode]);
+    range.collapse(false);
 
-  selection.removeAllRanges();
-  selection.addRange(range);
-}
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
 
-function handleCommand(command: string) {
-  const line = document.createElement('DIV');
-  line.textContent = `> ${ command }`;
-  history.appendChild(line);
+  public handleCommand(command: String): void {
+    const line = document.createElement('DIV');
+    line.textContent = `> ${ command }`;
+    this.history.appendChild(line);
 
-  if (command === 'test') {
-    const result = document.createElement('DIV');
-    result.textContent = `Test command works!`;
-    history.appendChild(result);
+    if (command === 'test') {
+      const result: HTMLElement = document.createElement('DIV');
+      result.textContent = `Test command works!`;
+      this.history.appendChild(result);
+    }
   }
 }
+
+let itedConsole: ITEDConsole = new ITEDConsole();
 
 document.addEventListener('selectionchange', () => {
   if (document.activeElement!.id !== 'input') return;
@@ -53,12 +65,12 @@ input.addEventListener('input', () => {
     const lastLine = lines[lines.length - 1];
     
     for (let i = 0; i <= lines.length - 2; ++i) {
-      handleCommand(lines[i]);
+      itedConsole.handleCommand(lines[i]);
     }
   
     input.textContent = lastLine;
     
-    focusAndMoveCursorToTheEnd();
+    itedConsole.focusAndMoveCursorToTheEnd();
   }
   
   if (input.innerText.length === 0) {
@@ -67,16 +79,16 @@ input.addEventListener('input', () => {
 });
 
 document.addEventListener('keydown', (e) => {
-  if (e.target !== input) focusAndMoveCursorToTheEnd();
+  if (e.target !== input) itedConsole.focusAndMoveCursorToTheEnd();
 });
 
 input.addEventListener('keydown', (e) => {    
   if (e.key === 'Enter') {
     e.preventDefault();
         
-    handleCommand(input.textContent!);    
+    itedConsole.handleCommand(input.textContent!);    
     input.textContent = '';
-    focusAndMoveCursorToTheEnd();
+    itedConsole.focusAndMoveCursorToTheEnd();
   }
 });
 
