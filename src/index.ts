@@ -1,15 +1,15 @@
 import './css/reset.css';
 import './css/global.css';
 
-const history = document.getElementById('history');
-const input = document.getElementById('input');
-const cursor = document.getElementById('cursor');
+const history = document.getElementById('history') as HTMLElement;
+const input = document.getElementById('input') as HTMLElement;
+const cursor = document.getElementById('cursor') as HTMLElement;
 
-function focusAndMoveCursorToTheEnd(e) {  
+function focusAndMoveCursorToTheEnd(e?: any) {  
   input.focus();
   
   const range = document.createRange();
-  const selection = window.getSelection();
+  const selection = window.getSelection() as Selection;
   const { childNodes } = input;
   const lastChildNode = childNodes && childNodes.length - 1;
   
@@ -20,21 +20,25 @@ function focusAndMoveCursorToTheEnd(e) {
   selection.addRange(range);
 }
 
-function handleCommand(command) {
+function handleCommand(command: string) {
   const line = document.createElement('DIV');
-  
   line.textContent = `> ${ command }`;
-  
   history.appendChild(line);
+
+  if (command === 'test') {
+    const result = document.createElement('DIV');
+    result.textContent = `Test command works!`;
+    history.appendChild(result);
+  }
 }
 
 document.addEventListener('selectionchange', () => {
-  if (document.activeElement.id !== 'input') return;
+  if (document.activeElement!.id !== 'input') return;
   
-  const range = window.getSelection().getRangeAt(0);
+  const range = window.getSelection()!.getRangeAt(0);
   const start = range.startOffset;
   const end = range.endOffset;
-  const length = input.textContent.length;
+  const length = input.textContent!.length;
   
   if (end < length) {
     input.classList.add('noCaret');
@@ -70,7 +74,7 @@ input.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     e.preventDefault();
         
-    handleCommand(input.textContent);    
+    handleCommand(input.textContent!);    
     input.textContent = '';
     focusAndMoveCursorToTheEnd();
   }
