@@ -35,6 +35,7 @@ export class ITEDConsole {
         const commandMembers = command.split(" ");
 
         const result: HTMLElement = document.createElement('DIV');
+
         switch(commandMembers[0]) {
             case 'test': {
                 result.textContent = `Test command works!`;
@@ -44,10 +45,22 @@ export class ITEDConsole {
                 result.textContent = `pong`;
                 break;
             }
+            case 'time': {
+                result.textContent = Date();
+                break;
+            }
+            case 'reverse': {
+                result.textContent = this.nodeTree.reverse(commandMembers[1]);
+                break;
+            }
             case 'create': {
                 switch (commandMembers[1]) {
                     case 'cat': {
                         result.textContent = `Был создан кот по имени ${commandMembers[2]}`;
+                        break;
+                    }
+                    case 'dog': {
+                        result.textContent = `Был создан пёс по имени ${commandMembers[2]}`;
                         break;
                     }
                 }
